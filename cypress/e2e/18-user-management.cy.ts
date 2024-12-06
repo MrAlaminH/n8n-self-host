@@ -153,7 +153,7 @@ describe('User Management', { disableAutoLogin: true }, () => {
 			.logo()
 			.should('have.attr', 'src')
 			.then((src) => {
-				expect(src).to.include('/assets/logo/n8n-logo-dark.svg');
+				expect(src).to.include('/static/logo/channel/dev-dark.svg');
 			});
 
 		cy.visit(personalSettingsPage.url);
@@ -164,7 +164,7 @@ describe('User Management', { disableAutoLogin: true }, () => {
 			.logo()
 			.should('have.attr', 'src')
 			.then((src) => {
-				expect(src).to.include('/assets/logo/n8n-logo-dark.svg');
+				expect(src).to.include('/static/logo/channel/dev.svg');
 			});
 	});
 
