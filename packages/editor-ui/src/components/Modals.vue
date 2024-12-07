@@ -34,7 +34,7 @@ import {
 	COMMUNITY_PLUS_ENROLLMENT_MODAL,
 } from '@/constants';
 
-import AboutModal from '@/components/AboutModal.vue';
+
 import ChatEmbedModal from '@/components/ChatEmbedModal.vue';
 import CommunityPackageManageConfirmModal from '@/components/CommunityPackageManageConfirmModal.vue';
 import CommunityPackageInstallModal from '@/components/CommunityPackageInstallModal.vue';
@@ -82,9 +82,6 @@ import type { EventBus } from 'n8n-design-system';
 			<template #default="{ modalName, activeId, mode }">
 				<CredentialEdit :modal-name="modalName" :mode="mode" :active-id="activeId" />
 			</template>
-		</ModalRoot>
-		<ModalRoot :name="ABOUT_MODAL_KEY">
-			<AboutModal />
 		</ModalRoot>
 
 		<ModalRoot :name="CHAT_EMBED_MODAL_KEY">
