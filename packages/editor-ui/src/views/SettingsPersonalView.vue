@@ -304,9 +304,9 @@ onBeforeUnmount(() => {
 								? i18n.baseText('settings.personal.mfa.button.disabled.infobox')
 								: i18n.baseText('settings.personal.mfa.button.enabled.infobox')
 						}}
-						<n8n-link :to="MFA_DOCS_URL" size="small" :bold="true">
+						<!-- <n8n-link :to="MFA_DOCS_URL" size="small" :bold="true">
 							{{ i18n.baseText('generic.learnMore') }}
-						</n8n-link>
+						</n8n-link> -->
 					</n8n-text>
 				</div>
 				<n8n-button

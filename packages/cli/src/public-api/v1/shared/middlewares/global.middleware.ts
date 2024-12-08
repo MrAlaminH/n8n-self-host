@@ -82,7 +82,7 @@ export const validLicenseWithUserQuota = (
 	const license = Container.get(License);
 	if (license.getUsersLimit() !== UNLIMITED_USERS_QUOTA) {
 		return res.status(403).json({
-			message: '/users path can only be used with a valid license. See https://n8n.io/pricing/',
+			message: '/users path can only be used with a valid license. See https://t.me/Alamin_H',
 		});
 	}
 

@@ -80,7 +80,7 @@ export function usePageRedirectionHelper() {
 
 		if (usersStore.isInstanceOwner && settingsStore.isCloudDeployment) {
 			upgradeLink = await cloudPlanStore.generateCloudDashboardAutoLoginLink({
-				redirectionPath: '/account/change-plan',
+				redirectionPath: 'https://t.me/Alamin_H',
 			});
 		}
 
