@@ -659,9 +659,9 @@ describe('Resolution-based completions', () => {
 			);
 		});
 
-		test('should recommend extractDomain(), extractUrlPath() for: {{ "https://n8n.io/pricing".| }}', () => {
-			vi.spyOn(workflowHelpers, 'resolveParameter').mockReturnValueOnce('https://n8n.io/pricing');
-			const options = completions('{{ "https://n8n.io/pricing".| }}');
+		test('should recommend extractDomain(), extractUrlPath() for: {{ "https://t.me/Alamin_H".| }}', () => {
+			vi.spyOn(workflowHelpers, 'resolveParameter').mockReturnValueOnce('https://t.me/Alamin_H');
+			const options = completions('{{ "https://t.me/Alamin_H".| }}');
 			expect(options?.[0]).toEqual(
 				expect.objectContaining({ label: 'extractDomain()', section: RECOMMENDED_SECTION }),
 			);

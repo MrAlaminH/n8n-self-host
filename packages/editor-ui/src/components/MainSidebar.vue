@@ -158,6 +158,34 @@ const openUpdatesPanel = () => {
 	uiStore.openModal(VERSIONS_MODAL_KEY);
 };
 
+const handleSelect = (key: string) => {
+	switch (key) {
+		case 'templates':
+			if (settingsStore.isTemplatesEnabled && !templatesStore.hasCustomTemplatesHost) {
+				trackTemplatesClick();
+			}
+			break;
+		case 'about': {
+			trackHelpItemClick('about');
+			uiStore.openModal(ABOUT_MODAL_KEY);
+			break;
+		}
+		case 'cloud-admin': {
+			void pageRedirectionHelper.goToDashboard();
+			break;
+		}
+		case 'quickstart':
+		case 'docs':
+		case 'forum':
+		case 'examples': {
+			trackHelpItemClick(key);
+			break;
+		}
+		default:
+			break;
+	}
+};
+
 const onResize = (event: UIEvent) => {
 	void callDebounced(onResizeEnd, { debounceTime: 100 }, event);
 };
@@ -175,11 +203,136 @@ const checkWidthAndAdjustSidebar = async (width: number) => {
 	}
 };
 
-const { menu, handleSelect: handleMenuSelect } = useGlobalEntityCreation();
+const {
+	menu,
+	handleSelect: handleMenuSelect,
+	createProjectAppendSlotName,
+	projectsLimitReachedMessage,
+} = useGlobalEntityCreation();
 onClickOutside(createBtn as Ref<VueInstance>, () => {
 	createBtn.value?.close();
 });
 </script>
+
+<template>
+	<div
+		id="side-menu"
+		:class="{
+			['side-menu']: true,
+			[$style.sideMenu]: true,
+			[$style.sideMenuCollapsed]: isCollapsed,
+		}"
+	>
+		<div
+			id="collapse-change-button"
+			:class="['clickable', $style.sideMenuCollapseButton]"
+			@click="toggleCollapse"
+		>
+			<N8nIcon v-if="isCollapsed" icon="chevron-right" size="xsmall" class="ml-5xs" />
+			<N8nIcon v-else icon="chevron-left" size="xsmall" class="mr-5xs" />
+		</div>
+		<div :class="$style.logo">
+			<img :src="logoPath" data-test-id="n8n-logo" :class="$style.icon" alt="n8n" />
+			<N8nNavigationDropdown
+				ref="createBtn"
+				data-test-id="universal-add"
+				:menu="menu"
+				@select="handleMenuSelect"
+			>
+				<N8nIconButton icon="plus" type="secondary" outline />
+				<template #[createProjectAppendSlotName]="{ item }">
+					<N8nTooltip v-if="item.disabled" placement="right" :content="projectsLimitReachedMessage">
+						<N8nButton
+							:size="'mini'"
+							style="margin-left: auto"
+							type="tertiary"
+							@click="handleMenuSelect(item.id)"
+						>
+							{{ i18n.baseText('generic.upgrade') }}
+						</N8nButton>
+					</N8nTooltip>
+				</template>
+			</N8nNavigationDropdown>
+		</div>
+		<N8nMenu :items="mainMenuItems" :collapsed="isCollapsed" @select="handleSelect">
+			<template #header>
+				<ProjectNavigation
+					:collapsed="isCollapsed"
+					:plan-name="cloudPlanStore.currentPlanData?.displayName"
+				/>
+			</template>
+
+			<template #beforeLowerMenu>
+				<BecomeTemplateCreatorCta v-if="fullyExpanded && !userIsTrialing" />
+			</template>
+			<template #menuSuffix>
+				<div>
+					<div
+						v-if="hasVersionUpdates"
+						data-test-id="version-updates-panel-button"
+						:class="$style.updates"
+						@click="openUpdatesPanel"
+					>
+						<div :class="$style.giftContainer">
+							<GiftNotificationIcon />
+						</div>
+						<N8nText
+							:class="{ ['ml-xs']: true, [$style.expanded]: fullyExpanded }"
+							color="text-base"
+						>
+							{{ nextVersions.length > 99 ? '99+' : nextVersions.length }} update{{
+								nextVersions.length > 1 ? 's' : ''
+							}}
+						</N8nText>
+					</div>
+					<MainSidebarSourceControl :is-collapsed="isCollapsed" />
+				</div>
+			</template>
+			<template v-if="showUserArea" #footer>
+				<div ref="user" :class="$style.userArea">
+					<div class="ml-3xs" data-test-id="main-sidebar-user-menu">
+						<!-- This dropdown is only enabled when sidebar is collapsed -->
+						<ElDropdown placement="right-end" trigger="click" @command="onUserActionToggle">
+							<div :class="{ [$style.avatar]: true, ['clickable']: isCollapsed }">
+								<N8nAvatar
+									:first-name="usersStore.currentUser?.firstName"
+									:last-name="usersStore.currentUser?.lastName"
+									size="small"
+								/>
+							</div>
+							<template v-if="isCollapsed" #dropdown>
+								<ElDropdownMenu>
+									<ElDropdownItem command="settings">
+										{{ i18n.baseText('settings') }}
+									</ElDropdownItem>
+									<ElDropdownItem command="logout">
+										{{ i18n.baseText('auth.signout') }}
+									</ElDropdownItem>
+								</ElDropdownMenu>
+							</template>
+						</ElDropdown>
+					</div>
+					<div
+						:class="{ ['ml-2xs']: true, [$style.userName]: true, [$style.expanded]: fullyExpanded }"
+					>
+						<N8nText size="small" :bold="true" color="text-dark">{{
+							usersStore.currentUser?.fullName
+						}}</N8nText>
+					</div>
+					<div :class="{ [$style.userActions]: true, [$style.expanded]: fullyExpanded }">
+						<N8nActionDropdown
+							:items="userMenuItems"
+							placement="top-start"
+							data-test-id="user-menu"
+							@select="onUserActionToggle"
+						/>
+					</div>
+				</div>
+			</template>
+		</N8nMenu>
+	</div>
+</template>
+
 <style lang="scss" module>
 .sideMenu {
 	position: relative;

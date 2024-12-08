@@ -55,7 +55,7 @@ describe('usePageRedirectionHelper', () => {
 			enabled: true,
 			endpoint: '',
 			infoUrl:
-				'https://docs.n8n.io/release-notes/#n8n1652?utm_source=n8n_app&utm_medium=instance_upgrade_releases',
+				'https://t.me/Alamin_H',
 		});
 	});
 
@@ -64,27 +64,27 @@ describe('usePageRedirectionHelper', () => {
 			'default',
 			'production',
 			ROLE.Owner,
-			'https://n8n.io/pricing?utm_campaign=upgrade-api&source=advanced-permissions',
+			'https://t.me/Alamin_H',
 		],
 		[
 			'default',
 			'development',
 			ROLE.Owner,
-			'https://n8n.io/pricing?utm_campaign=upgrade-api&source=advanced-permissions',
+			'https://t.me/Alamin_H',
 		],
 		[
 			'cloud',
 			'production',
 			ROLE.Owner,
 			`https://app.n8n.cloud/login?code=123&returnPath=${encodeURIComponent(
-				'/account/change-plan',
+				'/home/workflows',
 			)}&utm_campaign=upgrade-api&source=advanced-permissions`,
 		],
 		[
 			'cloud',
 			'production',
 			ROLE.Member,
-			'https://n8n.io/pricing?utm_campaign=upgrade-api&source=advanced-permissions',
+			'https://t.me/Alamin_H',
 		],
 	])(
 		'"goToUpgrade" should generate the correct URL for "%s" deployment and "%s" license environment and user role "%s"',
